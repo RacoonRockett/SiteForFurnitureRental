@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Примеры использования</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #3498db;
+            margin-right: 15px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .photo {
+            width: 30%;
+        }
+
+        img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        p {
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 0.9em;
+            color: #777;
+            text-align: center;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .photo {
+                width: 100%;
+            }
+
+            nav a {
+                display: block;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Контейнер для загрузки header -->
+<div id="header-container"></div>
+
+<h1 class="fade-in">Галерея мебели</h1>
+
+<div class="gallery fade-in">
+    <div class="photo"><img src="images/стол.jpg" alt="Рабочий стол"></div>
+    <div class="photo"><img src="images/стул.jpg" alt="Стул офисный"></div>
+    <div class="photo"><img src="images/стеллаж1.jpeg" alt="Стеллаж угловой открытый"></div>
+    <div class="photo"><img src="images/стеллаж2.jpeg" alt="Стеллаж с дверцами"></div>
+    <div class="photo"><img src="images/стеллаж3.jpeg" alt="Стеллаж прямой открытый"></div>
+    <div class="photo"><img src="images/домашний-кабинет.jpg" alt="Домашний кабинет"></div>
+</div>
+
+<p class="fade-in">Все фото сделаны у реальных клиентов. Мебель легко вписывается в любой интерьер.</p>
+
+<a href="catalog.html" class="btn fade-in">Посмотреть каталог мебели</a>
+
+<!-- Контейнер для загрузки footer -->
+<div id="footer-container"></div>
+
+<script>
+   // Анимация появления при скролле
+    const faders = document.querySelectorAll(".fade-in");
+
+    const appearOnScroll = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+        });
+    }, { threshold: 0.1 });
+
+    faders.forEach(el => {
+        appearOnScroll.observe(el);
+    });
+</script>
+
+<!-- Подключение общих элементов -->
+<script src="js/common.js"></script>
+<script>
+    // Загружаем header и footer при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function () {
+        loadHeader();
+        loadFooter();
+    });
+</script>
+
+</body>
+</html>

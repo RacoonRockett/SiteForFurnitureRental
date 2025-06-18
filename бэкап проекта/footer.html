@@ -1,0 +1,11 @@
+<!-- footer.html -->
+<footer>
+    &copy; <span id="current-year"></span> | Аренда офисной мебели в Петрозаводске
+</footer>
+
+<script src="js/load.js"></script>
+<script>
+    // Автоматическое обновление года
+    const year = new Date().getFullYear();
+    document.getElementById("current-year").textContent = year;
+</script>

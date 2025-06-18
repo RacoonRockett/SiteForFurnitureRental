@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>О нас</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Стили те же, что и выше */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #3498db;
+            margin-right: 15px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 0.9em;
+            color: #777;
+            text-align: center;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            nav a {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Контейнер для загрузки header -->
+<div id="header-container"></div>
+
+<h1 class="fade-in">Мы помогаем начать работать с комфортом</h1>
+
+<p class="fade-in">Привет! Меня зовут Юрий, и я запустил этот проект, потому что знаю, как сложно начинать с нуля.</p>
+<p class="fade-in">Когда я сам перешёл на удалённую работу, мне пришлось решать, где взять мебель, чтобы работать правильно — не за кухонным столом, а в удобном кресле, с правильной осанкой и настройкой.</p>
+<p class="fade-in">Покупать сразу всё было дорого. Так родилась идея — сдавать мебель в аренду тем, кто только начинает.</p>
+
+<div class="fade-in">
+    <p><strong>Сейчас это не просто мебель.</strong> Это возможность начать работать комфортно, без больших вложений, и решить потом — оставить мебель себе или нет.</p>
+    <p>Мы сотрудничаем с местными производителями, предлагаем честные условия и всегда рядом, если возникнут вопросы.</p>
+    <p>Если вы хотите работать лучше, чувствовать себя лучше и начать без лишнего риска — мы с вами.</p>
+</div>
+
+<a href="order.html" class="btn fade-in">Начать с аренды</a>
+
+<!-- Контейнер для загрузки footer -->
+<div id="footer-container"></div>
+
+<script>
+    const faders = document.querySelectorAll(".fade-in");
+
+    const appearOnScroll = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+        });
+    }, { threshold: 0.1 });
+
+    faders.forEach(el => {
+        appearOnScroll.observe(el);
+    });
+</script>
+
+<!-- Подключение общих элементов -->
+<script src="js/common.js"></script>
+<script>
+    // Загружаем header и footer при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function () {
+        loadHeader();
+        loadFooter();
+    });
+</script>
+
+</body>
+</html>

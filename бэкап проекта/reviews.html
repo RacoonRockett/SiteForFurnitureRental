@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Отзывы клиентов</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #3498db;
+            margin-top: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #3498db;
+            margin-right: 15px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .review {
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 0.9em;
+            color: #777;
+            text-align: center;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            nav a {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Контейнер для загрузки header -->
+<div id="header-container"></div>
+
+<h1 class="fade-in">Что говорят клиенты?</h1>
+
+<div class="review fade-in">
+    <p>«Начала фрилансить, но не знала, с чего начать. Купила кресло и стол на авито — но они оказались неудобными. Потом нашла аренду мебели — взяла комплект на 3 месяца. Теперь я работаю правильно и планирую выкупить мебель». — Екатерина</p>
+</div>
+
+<div class="review fade-in">
+    <p>«Хорошая идея для тех, кто начинает удалённо работать. Не нужно сразу покупать всё. Брали комплект на месяц, понравилось — оставили себе». — Иван</p>
+</div>
+
+<a href="order.html" class="btn fade-in">Оставить свой отзыв</a>
+
+<!-- Контейнер для загрузки footer -->
+<div id="footer-container"></div>
+
+<script>
+    const faders = document.querySelectorAll(".fade-in");
+
+    const appearOnScroll = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+        });
+    }, { threshold: 0.1 });
+
+    faders.forEach(el => {
+        appearOnScroll.observe(el);
+    });
+</script>
+
+<!-- Подключение общих элементов -->
+<script src="js/common.js"></script>
+<script>
+    // Загружаем header и footer при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function () {
+        loadHeader();
+        loadFooter();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Каталог мебели</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #3498db;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #3498db;
+            margin-right: 15px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 0.9em;
+            color: #777;
+            text-align: center;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            nav a {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Контейнер для загрузки header -->
+<div id="header-container"></div>
+
+<h1 class="fade-in">Наш каталог мебели</h1>
+
+<div class="item fade-in">
+    <h2>Комплект «Домашний кабинет»</h2>
+    <p><strong>Состав:</strong> стол + кресло</p>
+    <p><strong>Аренда:</strong> 1 500 руб./мес</p>
+    <p><strong>Выкуп:</strong> 7 500 руб.</p>
+</div>
+
+<div class="item fade-in">
+    <h2>Стол офисный</h2>
+    <p><strong>Аренда:</strong> 900 руб./мес</p>
+    <p><strong>Выкуп:</strong> 4 500 руб.</p>
+</div>
+
+<div class="item fade-in">
+    <h2>Офисное кресло</h2>
+    <p><strong>Аренда:</strong> 600 руб./мес</p>
+    <p><strong>Выкуп:</strong> 3 000 руб.</p>
+</div>
+
+<div class="item fade-in">
+    <h2>Стеллаж открытый</h2>
+    <p><strong>Аренда:</strong> 500 руб./мес</p>
+    <p><strong>Выкуп:</strong> 2 500 руб.</p>
+</div>
+
+<a href="order.html" class="btn fade-in">Оформить заказ</a>
+
+<!-- Контейнер для загрузки footer -->
+<div id="footer-container"></div>
+
+<script>
+    const faders = document.querySelectorAll(".fade-in");
+
+    const appearOnScroll = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+        });
+    }, { threshold: 0.1 });
+
+    faders.forEach(el => {
+        appearOnScroll.observe(el);
+    });
+</script>
+
+<!-- Подключение общих элементов -->
+<script src="js/common.js"></script>
+<script>
+    // Загружаем header и footer при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function () {
+        loadHeader();
+        loadFooter();
+    });
+</script>
+
+</body>
+</html>

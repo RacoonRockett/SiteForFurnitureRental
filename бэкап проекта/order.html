@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Оформить заказ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="text"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .product-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .product-option img {
+            width: 40px;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #3498db;
+            margin-right: 15px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 0.9em;
+            color: #777;
+            text-align: center;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Контейнер для загрузки шапки -->
+<div id="header-container"></div>
+
+<!-- Основной контент -->
+<div class="container fade-in">
+
+    <h1 class="fade-in">Оформить заказ</h1>
+    <p class="fade-in">Выберите нужный комплект и заполните форму ниже:</p>
+
+    <label for="name" class="fade-in">Имя:</label>
+    <input type="text" id="name" placeholder="Ваше имя" required class="fade-in">
+
+    <label for="phone" class="fade-in">Телефон:</label>
+    <input type="tel" id="phone" placeholder="+7 (XXX) XXX-XX-XX" required class="fade-in">
+
+    <label for="product" class="fade-in">Выберите товар:</label>
+    <select id="product" onchange="updateProductImage()" class="fade-in">
+        <option value="Комплект «Домашний кабинет»" data-img="images/домашний-кабинет.jpg">Комплект «Домашний кабинет»</option>
+        <option value="Стол офисный" data-img="images/стол.jpg">Стол офисный</option>
+        <option value="Офисный стул" data-img="images/стул.jpg">Офисный стул</option>
+        <option value="Стеллаж угловой открытый" data-img="images/стеллаж1.jpeg">Стеллаж угловой открытый</option>
+        <option value="Стеллаж прямой открытый" data-img="images/стеллаж2.jpeg">Стеллаж прямой открытый</option>
+        <option value="Стеллаж с дверцами" data-img="images/стеллаж3.jpeg">Стеллаж с дверцами</option>
+    </select>
+
+    <!-- Мини-картинка выбранного товара -->
+    <div style="margin-top: 10px;" class="fade-in">
+        <img id="product-image" src="" alt="Превью мебели" style="width: 100px; border-radius: 6px; display: none;">
+    </div>
+
+    <label for="duration" class="fade-in">Срок аренды:</label>
+    <select id="duration" class="fade-in">
+        <option value="1 месяц">1 месяц</option>
+        <option value="3 месяца">3 месяца</option>
+        <option value="6 месяцев">6 месяцев</option>
+        <option value="12 месяцев">12 месяцев</option>
+    </select>
+
+    <!-- Кнопка "Написать в Telegram" -->
+    <a href="#" onclick="sendToTelegram()" class="btn fade-in">Написать в Telegram</a>
+
+</div>
+
+<!-- Контейнер для футера -->
+<div id="footer-container"></div>
+
+<script>
+    // Подключение header и footer
+    window.onload = function () {
+        if (typeof loadHeader === 'function') loadHeader();
+        if (typeof loadFooter === 'function') loadFooter();
+
+        // Запуск анимации после загрузки всех элементов
+        const faders = document.querySelectorAll(".fade-in");
+        const appearOnScroll = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add("visible");
+                observer.unobserve(entry.target);
+            });
+        }, { threshold: 0.1 });
+
+        faders.forEach(el => {
+            appearOnScroll.observe(el);
+        });
+
+        updateProductImage(); // показываем первую картинку
+    };
+</script>
+
+<script>
+    // Функция обновления изображения товара
+    function updateProductImage() {
+        const select = document.getElementById("product");
+        const image = document.getElementById("product-image");
+
+        const selectedOption = select.options[select.selectedIndex];
+        const imgSrc = selectedOption.getAttribute("data-img");
+
+        if (imgSrc) {
+            image.src = imgSrc;
+            image.style.display = "inline-block";
+        } else {
+            image.style.display = "none";
+        }
+    }
+</script>
+
+<script>
+    // Функция отправки заявки в Telegram
+    function sendToTelegram() {
+        const name = encodeURIComponent(document.getElementById("name").value.trim());
+        const phone = encodeURIComponent(document.getElementById("phone").value.trim());
+        const product = encodeURIComponent(document.getElementById("product").value);
+        const duration = encodeURIComponent(document.getElementById("duration").value);
+
+        if (!name || !phone) {
+            alert("Пожалуйста, заполните обязательные поля");
+            return;
+        }
+
+        const message = `
+📦 Заявка на аренду мебели
+
+👤 Имя: ${name}
+📞 Телефон: ${phone}
+🛋️ Мебель: ${product}
+📅 Срок аренды: ${duration}
+        `.trim();
+
+        const botUrl = "https://t.me/RacoonRocket_bot";  // замени на свой ник
+        const fullUrl = `${botUrl}?text=${message}`;
+
+        window.open(fullUrl, "_blank");
+    }
+</script>
+
+<script src="js/common.js"></script>
+
+</body>
+</html>
