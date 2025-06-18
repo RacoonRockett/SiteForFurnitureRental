@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Аренда офисной мебели в Петрозаводске{% endblock %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Прайс-лист</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- Контейнер для загрузки header -->
+<div id="header-container"></div>
+
+<main class="fade-in">
+
+    <h1 class="fade-in">Прайс-лист</h1>
+
+    <table class="fade-in">
+        <tr>
+            <th>Название</th>
+            <th>Аренда (руб/мес)</th>
+            <th>Выкуп (руб)*</th>
+        </tr>
+        <tr>
+            <td>Комплект «Домашний кабинет»</td>
+            <td>1 500</td>
+            <td>7 500</td>
+        </tr>
+        <tr>
+            <td>Стол офисный</td>
+            <td>900</td>
+            <td>4 500</td>
+        </tr>
+        <tr>
+            <td>Офисный стул</td>
+            <td>600</td>
+            <td>3 000</td>
+        </tr>
+        <tr>
+            <td>Стеллаж угловой открытый</td>
+            <td>340</td>
+            <td>1 700</td>
+        </tr>
+        <tr>
+            <td>Стеллаж с дверцами</td>
+            <td>520</td>
+            <td>2 600</td>
+        </tr>
+        <tr>
+            <td>Стеллаж прямой открытый</td>
+            <td>260</td>
+            <td>1 300</td>
+        </tr>
+    </table>
+
+    <p class="fade-in">*Цены указаны при аренде от 1 месяца. Возможны скидки за долгосрочную аренду.</p>
+    <p class="fade-in">*Цены для выкупа действую при аренде от 6 месяца.</p>
+
+    <a href="order.html" class="btn fade-in">Оформить заказ</a>
+
+    <script>
+        const faders = document.querySelectorAll(".fade-in");
+
+        const appearOnScroll = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add("visible");
+                observer.unobserve(entry.target);
+            });
+        }, { threshold: 0.1 });
+
+        faders.forEach(el => {
+            appearOnScroll.observe(el);
+        });
+    </script>
+</main>
+
+{% endblock %}
+<footer>
+    &copy; {{ current_year }} | Аренда офисной мебели в Петрозаводске
+</footer>

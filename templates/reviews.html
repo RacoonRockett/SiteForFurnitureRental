@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Отзывы клиентов</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Контейнеры для header/footer -->
+<div id="header-container"></div>
+
+<main class="fade-in">
+
+    <section class="hero fade-in">
+        <h1>Что говорят клиенты?</h1>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>Екатерина</h3>
+                <p>«Начала фрилансить, но не знала, с чего начать. Купила кресло и стол на авито — но они оказались неудобными. Потом нашла аренду мебели — взяла комплект на 3 месяца. Теперь я работаю правильно и планирую выкупить мебель».</p>
+            </div>
+            <div class="feature-card">
+                <h3>Иван</h3>
+                <p>«Хорошая идея для тех, кто начинает удалённо работать. Не нужно сразу покупать всё. Брали комплект на месяц, понравилось — оставили себе».</p>
+            </div>
+        </div>
+
+        <a href="#modal" class="btn fade-in">Оставить свой отзыв</a>
+    </section>
+
+    <!-- Модальное окно -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Оставить отзыв</h2>
+            <form onsubmit="sendToTelegram(); return false;">
+                <label for="name">Имя:</label>
+                <input type="text" id="name" required>
+
+                <label for="phone">Телефон:</label>
+                <input type="tel" id="phone" placeholder="+7 (XXX) XXX-XX-XX" required>
+
+                <label for="product">Выберите товар:</label>
+                <select id="product" onchange="updateProductImage()">
+                    <option value="----">----</option>
+                    <option value="Комплект «Домашний кабинет»" data-img="images/домашний-кабинет.jpg">Комплект «Домашний кабинет»</option>
+                    <option value="Стол офисный" data-img="images/стол.jpg">Стол офисный</option>
+                    <option value="Офисный стул" data-img="images/стул.jpg">Офисный стул</option>
+                    <option value="Стеллаж угловой открытый" data-img="images/стеллаж1.jpeg">Стеллаж угловой открытый</option>
+                    <option value="Стеллаж с дверцами" data-img="images/стеллаж2.jpeg">Стеллаж с дверцами</option>
+                    <option value="Стеллаж прямой открытый" data-img="images/стеллаж3.jpeg">Стеллаж прямой открытый</option>
+                </select>
+
+                <div style="margin-top: 10px;">
+                    <img id="product-image" src="" alt="Превью мебели" style="width: 100px; border-radius: 6px;">
+                </div>
+
+                <label for="duration">Срок аренды:</label>
+                <select id="duration">
+                    <option value="1 месяц">1 месяц</option>
+                    <option value="3 месяца">3 месяца</option>
+                    <option value="6 месяцев">6 месяцев</option>
+                    <option value="12 месяцев">12 месяцев</option>
+                </select>
+
+                <button type="submit" class="btn" style="width: 100%; margin-top: 20px;">Написать в Telegram</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<!-- Подвал сайта -->
+<div id="footer-container"></div>
+
+<!-- Подключение JS -->
+<script src="js/common.js"></script>
+<script src="js/load.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        loadHeader();
+        loadFooter();
+    });
+</script>
+
+</body>
+</html>
