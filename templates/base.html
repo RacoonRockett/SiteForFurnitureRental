@@ -10,14 +10,7 @@
 
 <!-- Шапка -->
 <header>
-    <nav>
-        <a href="/">Главная</a>
-        <a href="/about">О нас</a>
-        <a href="/why-rent">Почему аренда?</a>
-        <a href="/catalog">Каталог</a>
-        <a href="/contacts">Контакты</a>
-        <a href="#" onclick="viewCart()"> Корзина <span id="cart-badge"></span></a>
-    </nav>
+    {% include "header.html" %}
 </header>
 
 <!-- Основной контент -->
@@ -28,13 +21,13 @@
 
 <!-- Подвал -->
 <footer>
-    &copy; {{ current_year }} | Аренда офисной мебели в Петрозаводске
+    {% include "footer.html" %}
 </footer>
 
 <!-- Модальное окно -->
 <div id="modal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="document.getElementById('modal').style.display='none'">&times;</span>
+        <span class="close">&times;</span>
         <h2>Оформить заказ</h2>
         <form onsubmit="sendToTelegram(); return false;" style="display:flex; flex-direction: column; gap: 10px;">
             <label for="name">Имя:</label>
@@ -43,13 +36,11 @@
             <label for="phone">Телефон:</label>
             <input type="tel" id="phone" placeholder="+7 (XXX) XXX-XX-XX" required>
 
-            <!-- Список товаров из корзины -->
             <ul id="cart-list"></ul>
 
-            <!-- Или выбор из списка, если корзина пуста -->
             <label for="product">Выберите товар:</label>
-            <select id="product" onchange="updateProductImage()">
-                <option value="Вопрос" data-img="/static/images/вопрос.jpg">----</option>
+            <select id="product" onchange="updateProductImage()" required>
+                <option value="">----</option>
                 <option value="Комплект «Домашний кабинет»" data-img="/static/images/домашний-кабинет.jpg">Комплект «Домашний кабинет»</option>
                 <option value="Стол офисный" data-img="/static/images/стол.jpg">Стол офисный</option>
                 <option value="Офисный стул" data-img="/static/images/стул.jpg">Офисный стул</option>
@@ -75,7 +66,7 @@
     </div>
 </div>
 
-<!-- Общий JS -->
+<!-- Единственный JS-файл -->
 <script src="/static/js/app.js"></script>
 
 </body>
