@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Оформить заказ{% endblock %}
+{% block content %}
+<h1 class="fade-in">Оформить заказ</h1>
+<form onsubmit="sendToTelegram(); return false;">
+    <label for="name">Имя:</label>
+    <input type="text" id="name" required>
+
+    <label for="phone">Телефон:</label>
+    <input type="tel" id="phone" placeholder="+7 (XXX) XXX-XX-XX" required>
+
+    <label for="product">Выберите товар:</label>
+    <select id="product" onchange="updateProductImage()" required>
+        <option value="----">----</option>
+        <option value="Комплект «Домашний кабинет»" data-img="static/images/домашний-кабинет.jpg">Комплект «Домашний кабинет»</option>
+        <option value="Стол офисный" data-img="static/images/стол.jpg">Стол офисный</option>
+        <option value="Офисный стул" data-img="static/images/стул.jpg">Офисный стул</option>
+        <option value="Стеллаж угловой открытый" data-img="static/images/стеллаж1.jpeg">Стеллаж угловой открытый</option>
+        <option value="Стеллаж с дверцами" data-img="static/images/стеллаж2.jpeg">Стеллаж с дверцами</option>
+        <option value="Стеллаж прямой открытый" data-img="static/images/стеллаж3.jpeg">Стеллаж прямой открытый</option>
+    </select>
+
+    <div style="margin-top:10px;">
+        <img id="product-image" src="" alt="Превью мебели" style="width:100px; border-radius:6px;">
+    </div>
+
+    <label for="duration">Срок аренды:</label>
+    <select id="duration">
+        <option value="1 месяц">1 месяц</option>
+        <option value="3 месяца">3 месяца</option>
+        <option value="6 месяцев">6 месяцев</option>
+        <option value="12 месяцев">12 месяцев</option>
+    </select>
+
+    <button type="submit" class="btn fade-in">Написать в Telegram</button>
+</form>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Каталог мебели{% endblock %}
+{% block content %}
+<h1 class="fade-in">Каталог мебели</h1>
+<p class="fade-in">У нас вы можете арендовать следующие комплекты:</p>
+<div class="features fade-in">
+    <div class="feature-card">
+        <img src="/static/images/домашний-кабинет.jpg" alt="Комплект «Домашний кабинет»">
+        <h3>Комплект «Домашний кабинет»</h3>
+        <p><strong>Аренда:</strong> 1 500 руб./мес</p>
+        <a href="#" onclick="addToCart('Комплект «Домашний кабинет»', '/static/images/домашний-кабинет.jpg')" class="btn">Добавить в корзину</a>
+    </div>
+    <div class="feature-card">
+        <img src="/static/images/стол.jpg" alt="Стол офисный">
+        <h3>Стол офисный</h3>
+        <p><strong>Аренда:</strong> 900 руб./мес</p>
+        <a href="#" onclick="addToCart('Стол офисный', '/static/images/стол.jpg')" class="btn">Добавить в корзину</a>
+    </div>
+    <div class="feature-card">
+        <img src="/static/images/стул.jpg" alt="Офисный стул">
+        <h3>Офисный стул</h3>
+        <p><strong>Аренда:</strong> 600 руб./мес</p>
+        <a href="#" onclick="addToCart('Офисный стул', '/static/images/стул.jpg')" class="btn">Добавить в корзину</a>
+    </div>
+    <div class="feature-card">
+        <img src="/static/images/стеллаж1.jpeg" alt="Стеллаж угловой открытый">
+        <h3>Стеллаж угловой открытый</h3>
+        <p><strong>Аренда:</strong> 340 руб./мес</p>
+        <a href="#" onclick="addToCart('Стеллаж угловой открытый', '/static/images/стеллаж1.jpeg')" class="btn">Добавить в корзину</a>
+    </div>
+    <div class="feature-card">
+        <img src="/static/images/стеллаж2.jpeg" alt="Стеллаж с дверцами">
+        <h3>Стеллаж с дверцами</h3>
+        <p><strong>Аренда:</strong> 520 руб./мес</p>
+        <a href="#" onclick="addToCart('Стеллаж с дверцами', '/static/images/стеллаж2.jpeg')" class="btn">Добавить в корзину</a>
+    </div>
+    <div class="feature-card">
+        <img src="/static/images/стеллаж3.jpeg" alt="Стеллаж прямой открытый">
+        <h3>Стеллаж прямой открытый</h3>
+        <p><strong>Аренда:</strong> 260 руб./мес</p>
+        <a href="#" onclick="addToCart('Стеллаж прямой открытый', '/static/images/стеллаж3.jpeg')" class="btn">Добавить в корзину</a>
+    </div>
+</div>
+{% endblock %}
