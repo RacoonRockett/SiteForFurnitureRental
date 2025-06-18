@@ -22,7 +22,7 @@ body {
 }
 
 header {
-    background: var(--primary);
+    background: var(--primary) !important;
     color: white;
     padding: 20px;
     text-align: center;
@@ -37,7 +37,7 @@ nav a {
 
 .container {
     max-width: 700px;
-    margin: 0 auto;
+    margin: auto;
     background: white;
     padding: 30px;
     border-radius: 10px;
@@ -162,4 +162,12 @@ footer {
 
 .cart-summary {
     margin-top: 10px;
+    padding: 10px;
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.cart-summary li {
+    list-style: none;
+    padding: 5px 0;
 }

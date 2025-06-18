@@ -2,12 +2,45 @@
 
 let cart = [];
 
-function addToCart(productName, productImg) {
-    cart.push({ name: productName, img: productImg });
+// Добавление товара в корзину
+function addToCart(productName, productImg, quantity = 1) {
+    const existingItem = cart.find(item => item.name === productName);
+    if (existingItem) {
+        existingItem.quantity += quantity;
+    } else {
+        cart.push({ name: productName, img: productImg, quantity: quantity });
+    }
+
     updateCartCount();
     alert(`"${productName}" добавлен в заказ`);
 }
 
+// Обновление счётчика корзины
+function updateCartCount() {
+    const badge = document.getElementById("cart-badge");
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+    badge.textContent = totalItems > 0 ? totalItems : "";
+    badge.style.display = totalItems > 0 ? "inline-block" : "none";
+}
+
+// Показываем содержимое корзины в модальном окне
+function viewCart() {
+    const cartList = document.getElementById("cart-list");
+    cartList.innerHTML = "";
+
+    if (cart.length === 0) {
+        cartList.innerHTML = "<p>Корзина пуста</p>";
+    } else {
+        cart.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = `${item.name} × ${item.quantity}`;
+            cartList.appendChild(li);
+        });
+    }
+}
+
+// Отправка заявки в Telegram
 function sendToTelegram() {
     const name = encodeURIComponent(document.getElementById("name").value.trim());
     const phone = encodeURIComponent(document.getElementById("phone").value.trim());
@@ -19,8 +52,9 @@ function sendToTelegram() {
     }
 
     let productsText = "";
+
     if (cart.length > 0) {
-        productsText = cart.map(p => `- ${p.name}`).join("\n");
+        productsText = cart.map(p => `- ${p.name} × ${p.quantity}`).join("\n");
     } else {
         const product = document.getElementById("product").value;
         productsText = "- " + product;
@@ -31,7 +65,7 @@ function sendToTelegram() {
 
 👤 Имя: ${name}
 📞 Телефон: ${phone}
-салонка:
+💺 Товар:
 ${productsText}
 📅 Срок аренды: ${duration}
 `.trim();
@@ -43,6 +77,7 @@ ${productsText}
     clearCart();
 }
 
+// Очистка корзины после отправки
 function clearCart() {
     cart = [];
     updateCartCount();
@@ -50,12 +85,7 @@ function clearCart() {
     if (cartList) cartList.innerHTML = "";
 }
 
-function updateCartCount() {
-    const badge = document.getElementById("cart-badge");
-    badge.textContent = cart.length > 0 ? cart.length : "";
-    badge.style.display = cart.length > 0 ? "inline-block" : "none";
-}
-
+// Обновление изображения при выборе товара
 function updateProductImage() {
     const select = document.getElementById("product");
     const image = document.getElementById("product-image");
@@ -70,7 +100,7 @@ function updateProductImage() {
     }
 }
 
-// Анимация появления
+// Анимация появления при скролле
 document.addEventListener("DOMContentLoaded", function () {
     const faders = document.querySelectorAll(".fade-in");
     const appearOnScroll = new IntersectionObserver((entries, observer) => {
@@ -85,6 +115,10 @@ document.addEventListener("DOMContentLoaded", function () {
         appearOnScroll.observe(el);
     });
 
+    // Подвал
+    document.getElementById("current-year") &&
+        (document.getElementById("current-year").textContent = new Date().getFullYear());
+
     // Модальное окно
     const modal = document.getElementById("modal");
     const closeBtn = document.querySelector(".close");
@@ -93,6 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
         link.addEventListener("click", e => {
             e.preventDefault();
             modal.style.display = "block";
+            viewCart(); // обновляем список товаров
         });
     });
 
@@ -101,11 +136,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
+        if (event.target == modal) modal.style.display = "none";
     };
-
-    // Обновление года
-    document.getElementById("current-year").textContent = new Date().getFullYear();
 });
