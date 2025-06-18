@@ -30,7 +30,7 @@ function viewCart() {
     cartList.innerHTML = "";
 
     if (cart.length === 0) {
-        cartList.innerHTML = "<p>Корзина пуста</p>";
+        cartList.innerHTML = "<p style='color: red;'>Корзина пуста</p>";
     } else {
         cart.forEach(item => {
             const li = document.createElement("li");
