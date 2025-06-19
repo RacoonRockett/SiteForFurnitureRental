@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Админка</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+      text-align: left;
+    }
+
+    select {
+      padding: 0.3rem;
+    }
+
+    form input {
+      display: block;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      width: 100%;
+    }
+  </style>
+</head>
+<script>
+  const token = localStorage.getItem('token');
+  if (!token) window.location.href = '/login.html';
+</script>
+<body>
+  <h1>Заказы</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Телефон</th>
+        <th>Сумма</th>
+        <th>Статус</th>
+      </tr>
+    </thead>
+    <tbody id="orders"></tbody>
+  </table>
+
+<h2>Товары</h2>
+<form id="productForm">
+  <input type="text" placeholder="Название" required>
+  <input type="text" placeholder="Описание" required>
+  <input type="number" placeholder="Цена" required>
+  <input type="url" placeholder="Ссылка на изображение" required>
+  <input type="text" placeholder="Категория (например, диваны)" required>
+  <button type="submit" class="btn">Добавить товар</button>
+</form>
+
+<h3>Список товаров</h3>
+<div id="products"></div>
+
+  <script>
+    fetch('/api/orders')
+      .then(res => res.json())
+      .then(orders => {
+        const tbody = document.getElementById('orders');
+        orders.forEach(order => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${order.id}</td>
+            <td>${order.name}</td>
+            <td>${order.phone}</td>
+            <td>${order.total} ₽</td>
+            <td>
+              <select data-id="${order.id}" onchange="updateStatus(this)">
+                <option value="новый" ${order.status === 'новый' ? 'selected' : ''}>Новый</option>
+                <option value="в работе" ${order.status === 'в работе' ? 'selected' : ''}>В работе</option>
+                <option value="выполнен" ${order.status === 'выполнен' ? 'selected' : ''}>Выполнен</option>
+              </select>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+
+    function updateStatus(select) {
+      const id = select.dataset.id;
+      const status = select.value;
+      fetch(`/api/orders/${id}/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+    }
+  </script>
+
+<script>
+  // ... (ваш существующий код авторизации)
+
+  // Загрузка товаров
+  function loadProducts() {
+    fetch('/api/products')
+      .then(res => res.json())
+      .then(products => {
+        const container = document.getElementById('products');
+        container.innerHTML = '';
+        products.forEach(product => {
+          const div = document.createElement('div');
+          div.style.border = '1px solid #ccc';
+          div.style.padding = '1rem';
+          div.style.marginBottom = '1rem';
+          div.innerHTML = `
+            <strong>${product.name}</strong> — ${product.price} ₽<br>
+            <small>${product.description}</small><br>
+            <img src="${product.imageUrl}" alt="${product.name}" style="max-width: 100%; max-height: 150px;"><br>
+            <button onclick="deleteProduct('${product.id}')">Удалить</button>
+          `;
+          container.appendChild(div);
+        });
+      });
+  }
+
+  // Добавление товара
+  document.getElementById('productForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const productData = Object.fromEntries(formData);
+
+    await fetch('/api/products', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(productData)
+    });
+
+    e.target.reset();
+    loadProducts();
+  });
+
+  // Удаление товара
+  async function deleteProduct(id) {
+    if (!confirm("Удалить товар?")) return;
+
+    await fetch(`/api/products/${id}`, {
+      method: 'DELETE'
+    });
+
+    loadProducts();
+  }
+
+  // При загрузке
+  window.onload = () => {
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/login.html';
+
+    loadProducts();
+  };
+</script>
+
+</body>
+</html>

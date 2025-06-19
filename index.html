@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Аренда мебели</title>
+  <style>
+    :root {
+      --main-color: #2c3e50;
+      --accent-color: #e67e22;
+      --bg-color: #f9f9f9;
+      --text-color: #333;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--main-color);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    nav {
+      display: flex;
+      gap: 1rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    .cart-badge {
+      background: red;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      vertical-align: middle;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 5rem 2rem;
+      background: url('https://source.unsplash.com/featured/?furniture') no-repeat center/cover;
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      background: var(--accent-color);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 4px;
+    }
+
+    section {
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 1rem;
+    }
+
+    .price {
+      font-size: 1.2rem;
+      color: var(--accent-color);
+      margin: 0.5rem 0;
+    }
+
+    .quantity-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .quantity-controls button {
+      background: var(--main-color);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    footer {
+      background: var(--main-color);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    /* Модальное окно */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1001;
+      left: 0; right: 0; top: 0; bottom: 0;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      position: relative;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Шапка -->
+<header>
+  <div class="logo">Мебель в Аренду</div>
+  <nav>
+    <a href="#why-rent">Почему аренда?</a>
+    <a href="#catalog">Каталог</a>
+    <a href="#compare">Сравнение</a>
+    <a href="#order">Заказ</a>
+    <span class="cart-badge" id="cart-count">0</span>
+  </nav>
+</header>
+
+<!-- Главный блок -->
+<section class="hero">
+  <h1>Начни с аренды мебели</h1>
+  <p>Протестируйте стиль, сэкономьте бюджет и получите полную свободу выбора.</p>
+  <button class="btn" onclick="scrollToCatalog()">Выбрать мебель</button>
+</section>
+
+<!-- Каталог -->
+<section id="catalog" class="catalog">
+  <h2>Каталог мебели</h2>
+  <div class="cards" id="product-cards">
+    <!-- Товары будут динамически подгружены или добавлены вручную -->
+    <div class="card" data-id="sofa" data-name="Угловой диван" data-price="1800">
+      <img src="https://source.unsplash.com/featured/?sofa" alt="Диван">
+      <div class="card-body">
+        <h3>Угловой диван</h3>
+        <p>Стильный угловой диван для гостиной в современном стиле.</p>
+        <p class="price">от 1800 ₽/мес</p>
+        <div class="quantity-controls">
+          <button onclick="changeQty(this, -1)">-</button>
+          <span>0</span>
+          <button onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+    <!-- Добавь остальные товары аналогично -->
+  </div>
+</section>
+
+<!-- Форма заказа -->
+<div class="modal" id="orderModal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <h3>Оформить заказ</h3>
+    <form id="orderForm">
+      <input type="text" placeholder="Имя" required>
+      <input type="tel" placeholder="Телефон" required>
+      <textarea placeholder="Комментарий"></textarea>
+      <button type="submit" class="btn">Отправить заказ</button>
+      <button type="button" class="btn" onclick="checkout()">Оплатить</button>
+    </form>
+  </div>
+</div>
+
+<!-- Подвал -->
+<footer>
+  &copy; 2025 МебельНаАренду. Все права защищены.
+</footer>
+
+<script>
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+  function updateCartDisplay() {
+    document.getElementById('cart-count').textContent = cart.length;
+  }
+
+  function addToCart(btn) {
+    const card = btn.closest('.card');
+    const id = card.dataset.id;
+    const name = card.dataset.name;
+    const price = card.dataset.price;
+    const qty = parseInt(card.querySelector('span').textContent);
+
+    if (qty > 0) {
+      for (let i = 0; i < qty; i++) {
+        cart.push({ id, name, price });
+      }
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartDisplay();
+  }
+
+  function changeQty(btn, delta) {
+    const span = btn.parentNode.querySelector('span');
+    let qty = parseInt(span.textContent);
+    qty += delta;
+    if (qty < 0) qty = 0;
+    span.textContent = qty;
+  }
+
+  function scrollToCatalog() {
+    document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function openModal() {
+    document.getElementById('orderModal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('orderModal').style.display = 'none';
+  }
+
+  // Отправка формы
+  document.getElementById('orderForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const name = formData.get('name');
+    const phone = formData.get('phone');
+    const comment = formData.get('comment');
+
+    const orderData = {
+      name,
+      phone,
+      comment,
+      items: cart
+    };
+
+    try {
+      const res = await fetch('http://localhost:3000/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      });
+
+      alert('Заказ отправлен!');
+      cart = [];
+      localStorage.removeItem('cart');
+      updateCartDisplay();
+      closeModal();
+    } catch (err) {
+      alert('Ошибка при отправке заказа.');
+      console.error(err);
+    }
+  });
+
+  updateCartDisplay();
+</script>
+
+<script>
+  async function loadCatalog() {
+    const res = await fetch('http://localhost:3000/api/products');
+    const products = await res.json();
+
+    const container = document.getElementById('product-cards');
+    container.innerHTML = '';
+
+    products.forEach(product => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.setAttribute('data-id', product.id);
+      card.setAttribute('data-name', product.name);
+      card.setAttribute('data-price', product.price);
+      card.innerHTML = `
+        <img src="${product.imageUrl}" alt="${product.name}">
+        <div class="card-body">
+          <h3>${product.name}</h3>
+          <p>${product.description}</p>
+          <p class="price">от ${product.price} ₽/мес</p>
+          <div class="quantity-controls">
+            <button onclick="changeQty(this, -1)">-</button>
+            <span>0</span>
+            <button onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  window.onload = () => {
+    loadCatalog();
+    updateCartDisplay();
+  };
+</script>
+
+<script>
+  // ... существующие функции addToCart, changeQty и т.д.
+
+  async function checkout() {
+    if (cart.length === 0) {
+      alert("Выберите товары перед оплатой.");
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:3000/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: cart })
+      });
+
+      const session = await response.json();
+      const stripe = Stripe('pk_test_51Nw...ваш_публичный_ключ');
+      await stripe.redirectToCheckout({
+        sessionId: session.id
+      });
+
+    } catch (error) {
+      console.error('Ошибка при создании сессии оплаты:', error);
+      alert('Не удалось открыть страницу оплаты.');
+    }
+  }
+
+  async function loadCatalog() {
+    try {
+      const res = await fetch('http://localhost:3000/api/products');
+      if (!res.ok) throw new Error('Ошибка загрузки каталога');
+
+      const products = await res.json();
+
+      const container = document.getElementById('product-cards');
+      container.innerHTML = '';
+
+      products.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.setAttribute('data-id', product.id);
+        card.setAttribute('data-name', product.name);
+        card.setAttribute('data-price', product.price);
+        card.innerHTML = `
+          <img src="${product.imageUrl}" alt="${product.name}" loading="lazy">
+          <div class="card-body">
+            <h3>${product.name}</h3>
+            <p>${product.description}</p>
+            <p class="price">от ${product.price} ₽/мес</p>
+            <div class="quantity-controls">
+              <button onclick="changeQty(this, -1)">-</button>
+              <span>0</span>
+              <button onclick="addToCart(this)">+</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    } catch (err) {
+      console.error(err);
+      container.innerHTML = '<p>Не удалось загрузить товары.</p>';
+    }
+  }
+
+  window.onload = () => {
+    loadCatalog();
+    updateCartDisplay();
+  };
+</script>
+</body>
+</html>
