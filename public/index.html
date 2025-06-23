@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Мебельная Аренда</title>
+  <link rel="stylesheet" href="/style.css"/>
+  <link rel="manifest" href="/manifest.json" />
+  <script defer src="/scripts/main.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Мебельная Аренда</h1>
+    <nav>
+      <ul>
+        <li><a href="/">Главная</a></li>
+        <li><a href="/catalog">Каталог</a></li>
+        <li><a href="/about">О нас</a></li>
+        <li><a href="/contact">Контакты</a></li>
+        <li><a href="/login">Войти</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="products" id="products">
+    <h2>Наши товары</h2>
+    <div id="product-list"></div>
+  </section>
+
+  <div id="cookie-banner" class="hidden">
+    <p id="cookie-text"></p>
+    <button id="accept-cookies">{{ accept }}</button>
+    <button id="decline-cookies">{{ decline }}</button>
+  </div>
+</body>
+</html>

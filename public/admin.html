@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Админка</title>
+  <link rel="stylesheet" href="/style.css"/>
+  <script defer src="/scripts/admin.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Панель администратора</h1>
+    <nav>
+      <ul>
+        <li><a href="/admin/products">Товары</a></li>
+        <li><a href="/admin/orders">Заказы</a></li>
+        <li><a href="/logout">Выход</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section>
+    <h2>Добавить товар</h2>
+    <form id="add-product-form">
+      <input type="text" id="name" placeholder="Название" required/>
+      <textarea id="description" placeholder="Описание" required></textarea>
+      <input type="number" id="price" placeholder="Цена" required/>
+      <input type="text" id="image_url" placeholder="URL изображения" required/>
+      <select id="category">
+        <option value="">Выберите категорию</option>
+        <option value="sofas">Диваны</option>
+        <option value="chairs">Стулья</option>
+        <option value="tables">Столы</option>
+      </select>
+      <button type="submit">Добавить</button>
+    </form>
+  </section>
+</body>
+</html>
