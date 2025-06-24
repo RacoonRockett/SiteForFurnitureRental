@@ -12,6 +12,7 @@ const fs = require('fs');
 const path = require('path');
 const compression = require('compression');
 const helmet = require('helmet');
+const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ const pool = new Pool({
 });
 
 app.use(helmet());
+app.use(morgan('combined'));
 app.use(compression());
 app.use(cors());
 app.use(bodyParser.json());
@@ -36,6 +38,13 @@ const loginLimiter = rateLimit({
   max: 5,
   message: 'Слишком много попыток входа'
 });
+app.use('/api/', loginLimiter);
+
+const corsOptions = {
+  origin: ['https://вашсайт.ru',  'https://admin.вашсайт.ru'],
+  credentials: true
+};
+app.use(cors(corsOptions));
 
 // Swagger UI
 const swaggerUi = require('swagger-ui-express');
@@ -53,18 +62,25 @@ if (botToken && chatId) {
 }
 
 // Auth middleware
+const jwt = require('jsonwebtoken');
+
 function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Неавторизован' });
   }
+
   const token = authHeader.split(' ')[1];
+
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     req.user = decoded;
     next();
   } catch (err) {
-    res.status(401).json({ error: 'Сессия истекла' });
+    if (err.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Сессия истекла' });
+    }
+    return res.status(401).json({ error: 'Неверный токен' });
   }
 }
 
@@ -133,29 +149,49 @@ app.post('/api/orders', authenticate, async (req, res) => {
   const { items } = req.body;
   let total = 0;
   const client = await pool.connect();
+
   try {
     await client.query('BEGIN');
+
+    // Создаем заказ без суммы, чтобы получить ID
+    const orderRes = await client.query(
+      'INSERT INTO orders(status) VALUES($1) RETURNING id',
+      ['new']
+    );
+    const orderId = orderRes.rows[0].id;
+
+    // Обрабатываем товары
     for (const item of items) {
-      const productRes = await client.query('SELECT price FROM products WHERE id = $1', [item.product_id]);
+      const productRes = await client.query(
+        'SELECT price FROM products WHERE id = $1',
+        [item.product_id]
+      );
+
       if (productRes.rows.length === 0) {
         throw new Error(`Товар ${item.product_id} не найден`);
       }
+
       const price = productRes.rows[0].price;
+      const itemTotal = price * item.quantity;
+      total += itemTotal;
+
       await client.query(
-        'INSERT INTO order_items(order_id, product_id, quantity, price) VALUES(DEFAULT, $1, $2, $3)',
-        [item.product_id, item.quantity, price]
+        'INSERT INTO order_items(order_id, product_id, quantity, price) VALUES($1, $2, $3, $4)',
+        [orderId, item.product_id, item.quantity, price]
       );
-      total += price * item.quantity;
     }
-    const orderRes = await client.query(
-      'INSERT INTO orders(total) VALUES($1) RETURNING id',
-      [total]
+
+    // Обновляем сумму заказа
+    await client.query(
+      'UPDATE orders SET total = $1 WHERE id = $2',
+      [total, orderId]
     );
-    const orderId = orderRes.rows[0].id;
+
     await client.query('COMMIT');
     res.status(201).json({ orderId, total });
   } catch (error) {
     await client.query('ROLLBACK');
+    console.error('Ошибка создания заказа:', error);
     res.status(500).json({ error: 'Ошибка создания заказа' });
   } finally {
     client.release();
@@ -180,8 +216,15 @@ app.post('/tinkoff-webhook', async (req, res) => {
 });
 
 function verifyTinkoffSignature(data, signature) {
+  // Для Тинькофф формируется строка из значений всех полей, кроме Token, в алфавитном порядке
+  const fields = Object.keys(data)
+    .filter(key => key !== 'Token')
+    .sort()
+    .map(key => data[key])
+    .join('');
+
   const hmac = crypto.createHmac('sha256', process.env.TINKOFF_SECRET_KEY);
-  hmac.update(JSON.stringify(data));
+  hmac.update(fields);
   const digest = hmac.digest('hex');
   return digest === signature;
 }
