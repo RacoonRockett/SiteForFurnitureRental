@@ -1,19 +1,27 @@
-document.getElementById('login-form').addEventListener('submit', async e => {
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
 
-  const response = await fetch('/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password })
-  });
+  const formData = {
+    username: e.target.username.value,
+    password: e.target.password.value
+  };
 
-  if (response.ok) {
-    const data = await response.json();
-    localStorage.setItem('token', data.token);
-    window.location.href = '/admin.html';
-  } else {
-    alert('Ошибка входа');
+  try {
+    const response = await fetch('/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+      credentials: 'include'
+    });
+
+    if (response.ok) {
+      window.location.href = '/admin.html';
+    } else {
+      const error = await response.json();
+      alert(error.error || 'Ошибка входа');
+    }
+  } catch (err) {
+    console.error('Ошибка:', err);
+    alert('Сервер недоступен');
   }
 });

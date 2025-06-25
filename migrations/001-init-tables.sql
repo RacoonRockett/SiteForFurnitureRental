@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS admins (
   username TEXT PRIMARY KEY,
-  password TEXT NOT NULL
+  password TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS products (
@@ -9,7 +10,8 @@ CREATE TABLE IF NOT EXISTS products (
   description TEXT NOT NULL,
   price DECIMAL(10,2) NOT NULL,
   image_url TEXT NOT NULL,
-  category TEXT
+  category TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS orders (
@@ -24,7 +26,8 @@ CREATE TABLE IF NOT EXISTS order_items (
   order_id INTEGER REFERENCES orders(id) ON DELETE CASCADE,
   product_id INTEGER REFERENCES products(id) ON DELETE SET NULL,
   quantity INTEGER NOT NULL,
-  price DECIMAL(10,2) NOT NULL
+  price DECIMAL(10,2) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE INDEX idx_orders_status ON orders(status);

@@ -11,11 +11,11 @@ services:
       DB_NAME: furniture_rental
       DB_HOST: db
       DB_PORT: 5432
-      JWT_SECRET: your_JWT_SECRET
+      JWT_SECRET: dab021214165a62e3d3e171d1b0c68bfced54233d0faac7edbcf3ec6b957c42d
       TINKOFF_TERMINAL_KEY: your_tinkoff_terminal_key
       TINKOFF_SECRET_KEY: your_tinkoff_secret_key
       TELEGRAM_BOT_TOKEN: your_telegram_bot_token
-      TELEGRAM_CHAT_ID: your_TELEGRAM_CHAT_ID
+      TELEGRAM_CHAT_ID: RacoonRocket
       VAPID_PUBLIC_KEY: your_vapid_public_key
       VAPID_PRIVATE_KEY: your_vapid_private_key
       GA_TRACKING_ID: UA-XXXXXXXXX-Y

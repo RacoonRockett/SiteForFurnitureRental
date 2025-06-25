@@ -1,3 +1,33 @@
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  try {
+    const response = await fetch('/logout', {
+      method: 'POST',
+      credentials: 'include'
+    });
+
+    if (response.ok) {
+      window.location.href = '/login.html';
+    }
+  } catch (err) {
+    console.error('Ошибка выхода:', err);
+    alert('Ошибка при выходе');
+  }
+});
+
+// Проверяем авторизацию при загрузке
+(async () => {
+  try {
+    const response = await fetch('/api/check-auth', {
+      credentials: 'include'
+    });
+
+    if (!response.ok) {
+      window.location.href = '/login.html';
+    }
+  } catch (err) {
+    window.location.href = '/login.html';
+  }
+})();
 document.getElementById('add-product-form').addEventListener('submit', async e => {
   e.preventDefault();
   const token = localStorage.getItem('token');

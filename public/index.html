@@ -1,31 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Мебельная Аренда</title>
+  <title>Мебель в Аренду</title>
   <link rel="stylesheet" href="/style.css"/>
   <link rel="manifest" href="/manifest.json" />
-  <script defer src="/scripts/main.js"></script>
+  <script defer src="/scripts/main.js" type="module"></script>
+  <script defer src="/scripts/auth-check.js" type="module"></script>
 </head>
 <body>
   <header>
-    <h1>Мебельная Аренда</h1>
+    <h1>Мебель в Аренду</h1>
     <nav>
       <ul>
         <li><a href="/">Главная</a></li>
         <li><a href="/catalog">Каталог</a></li>
         <li><a href="/about">О нас</a></li>
         <li><a href="/contact">Контакты</a></li>
-        <li><a href="/login">Войти</a></li>
+        <li id="login-nav-item"><a href="/login.html">Войти</a></li>
+        <li id="admin-nav-item" class="hidden"><a href="/admin.html">Админка</a></li>
+        <li id="logout-nav-item" class="hidden"><a href="#" id="logout-link">Выйти</a></li>
+        <li><a href="/cart">Корзина</a></li>
       </ul>
     </nav>
   </header>
 
-  <section class="products" id="products">
-    <h2>Наши товары</h2>
-    <div id="product-list"></div>
-  </section>
+  <main>
+    <h1>Аренда мебели для вашего дома</h1>
+    <section class="features">
+      <h2>Почему мы?</h2>
+      <div class="feature">
+        <h3>Качество</h3>
+        <p>Только проверенные производители.</p>
+      </div>
+    </section>
+
+    <section class="products" id="products">
+      <h2>Наши товары</h2>
+      <div id="product-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Аренда мебели</p>
+  </footer>
 
   <div id="cookie-banner" class="hidden">
     <p id="cookie-text"></p>
